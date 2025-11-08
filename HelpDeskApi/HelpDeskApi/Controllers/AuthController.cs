@@ -1,0 +1,75 @@
+﻿using HelpDeskApi.Data;
+using HelpDeskApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+
+namespace HelpDeskApi.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly IConfiguration _config;
+        private readonly AppDbContext _context;
+
+        public AuthController(IConfiguration config, AppDbContext context)
+        {
+            _config = config;
+            _context = context;
+        }
+
+        [HttpPost("registrar")]
+        public IActionResult Registrar([FromBody] Usuario novoUsuario)
+        {
+            if (_context.Usuarios.Any(u => u.Email == novoUsuario.Email))
+                return BadRequest("E-mail já registrado.");
+
+            _context.Usuarios.Add(novoUsuario);
+            _context.SaveChanges();
+
+            return Ok("Usuário registrado com sucesso!");
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] Usuario login)
+        {
+            var usuario = _context.Usuarios
+                .FirstOrDefault(u => u.Email == login.Email && u.senha == login.senha);
+
+            if (usuario == null)
+                return Unauthorized("E-mail ou senha inválidos.");
+
+            var token = GerarToken(usuario);
+            return Ok(new { token, usuario.Name, usuario.Role });
+        }
+
+        private string GerarToken(Usuario usuario)
+        {
+            var jwtSettings = _config.GetSection("Jwt");
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings["Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim("id", usuario.Id.ToString()),
+                new Claim(ClaimTypes.Name, usuario.Name),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Role, usuario.Role)
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(2),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+}
