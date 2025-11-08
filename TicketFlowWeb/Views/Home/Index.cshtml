@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="header">
+    <h1>Sistema de Gestão de Chamados</h1>
+    <div class="user-info">
+        <span>João Silva</span>
+        <div class="user-avatar">👤</div>
+    </div>
+</div>
+
+<!-- Dashboard Section -->
+<div id="dashboard" class="content-section">
+    <h2>Dashboard</h2>
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>Chamados Abertos</h3>
+            <div class="number">24</div>
+        </div>
+        <div class="card">
+            <h3>Em Andamento</h3>
+            <div class="number">12</div>
+        </div>
+        <div class="card">
+            <h3>Resolvidos Hoje</h3>
+            <div class="number">8</div>
+        </div>
+        <div class="card">
+            <h3>Tempo Médio</h3>
+            <div class="number">2h 30m</div>
+        </div>
+    </div>
+</div>
+
+<!-- Outras seções -->
+<div id="criar-chamado" class="content-section" style="display:none;">
+    <h2>Abrir Novo Chamado</h2>
+    <form id="form-chamado">
+        <div class="form-group">
+            <label for="titulo">Título do Chamado</label>
+            <input type="text" id="titulo" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" class="form-control" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="hardware">Hardware</option>
+                <option value="software">Software</option>
+                <option value="rede">Rede</option>
+                <option value="outros">Outros</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição Detalhada</label>
+            <textarea id="descricao" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="prioridade">Prioridade</label>
+            <select id="prioridade" class="form-control" required>
+                <option value="baixa">Baixa</option>
+                <option value="media" selected>Média</option>
+                <option value="alta">Alta</option>
+                <option value="urgente">Urgente</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="button" class="btn btn-primary" onclick="criarChamado()">Abrir Chamado</button>
+            <button type="button" class="btn" onclick="showSection('dashboard')">Cancelar</button>
+        </div>
+    </form>
+</div>
+
+<div id="ver-chamados" class="content-section" style="display:none;">
+    <h2>Todos os Chamados</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Categoria</th>
+                    <th>Status</th>
+                    <th>Prioridade</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#001</td>
+                    <td>Problema com impressora</td>
+                    <td>Hardware</td>
+                    <td><span style="color: var(--warning-color);">Em Andamento</span></td>
+                    <td><span style="color: var(--danger-color);">Alta</span></td>
+                    <td>10/11/2024</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editarChamado(1)">Editar</button>
+                        <button class="btn btn-danger" onclick="excluirChamado(1)">Excluir</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="meus-chamados" class="content-section" style="display:none;">
+    <h2>Meus Chamados</h2>
+    <p>Aqui aparecerão apenas os chamados do usuário logado.</p>
+</div>
+
+<div id="faq" class="content-section" style="display:none;">
+    <h2>FAQ e Soluções Sugeridas pela IA</h2>
+    <p>Conteúdo do FAQ será carregado aqui...</p>
+</div>
