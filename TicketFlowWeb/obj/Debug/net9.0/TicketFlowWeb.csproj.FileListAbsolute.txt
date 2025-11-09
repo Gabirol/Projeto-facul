@@ -326,3 +326,13 @@ C:\Users\Pichau\Source\Repos\Projeto-facul\TicketFlowWeb\bin\Debug\net9.0\runtim
 C:\Users\Pichau\Source\Repos\Projeto-facul\TicketFlowWeb\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Pichau\Source\Repos\Projeto-facul\TicketFlowWeb\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\Pichau\Source\Repos\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFl.283C28DC.Up2Date
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.csproj.AssemblyReference.cache
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.AssemblyInfoInputs.cache
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.AssemblyInfo.cs
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.csproj.CoreCompileInputs.cache
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.RazorAssemblyInfo.cache
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.RazorAssemblyInfo.cs
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.sourcelink.json

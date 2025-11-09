@@ -9,12 +9,7 @@ namespace TicketFlowWeb.Models
             : base(options)
         {
         }
-
-        // Mapeie suas tabelas existentes do banco HelpDeskDB
         public DbSet<UsuarioModel> Usuarios { get; set; }
-
-        // Adicione outras DbSets conforme suas tabelas:
-        // public DbSet<Chamado> Chamados { get; set; }
-        // public DbSet<Departamento> Departamentos { get; set; }
+        public DbSet<ChamadoModel> ChamadosModel { get; set; }
     }
 }

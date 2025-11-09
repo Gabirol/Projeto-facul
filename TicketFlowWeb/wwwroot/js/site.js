@@ -11,15 +11,57 @@
 }
 
 function criarChamado() {
-    const titulo = document.getElementById('titulo').value;
-    const descricao = document.getElementById('descricao').value;
+    const chamado = {
+        titulo: document.getElementById('titulo').value,
+        categoria: document.getElementById('categoria').value,
+        descricao: document.getElementById('descricao').value,
+        prioridade: document.getElementById('prioridade').value
+    };
 
-    if (titulo && descricao) {
-        alert('Chamado criado com sucesso!');
-        showSection('meus-chamados');
-    } else {
+    // Validação básica
+    if (!chamado.titulo || !chamado.categoria || !chamado.descricao) {
         alert('Preencha todos os campos obrigatórios!');
+        return;
     }
+
+    // Mostra loading
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Abrindo Chamado...';
+
+    // Envia via AJAX
+    fetch('/Chamados/Criar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(chamado)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Chamado #' + data.id + ' criado com sucesso!');
+                // Limpa o formulário
+                document.getElementById('form-chamado').reset();
+                // Volta para o dashboard
+                showSection('dashboard');
+                // Recarrega a lista de chamados se existir
+                if (typeof carregarChamados === 'function') {
+                    carregarChamados();
+                }
+            } else {
+                alert('Erro: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao criar chamado');
+        })
+        .finally(() => {
+            // Restaura o botão
+            btn.disabled = false;
+            btn.textContent = 'Abrir Chamado';
+        });
 }
 
 function editarChamado(id) {
