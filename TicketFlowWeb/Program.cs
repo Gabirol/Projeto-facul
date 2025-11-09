@@ -48,7 +48,6 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // Adicione suas DbSets aqui conforme criar as models
      public DbSet<UsuarioModel> Usuarios { get; set; }
-    //public DbSet<Chamado> Chamados { get; set; }
+    public DbSet<ChamadoModel> Chamados { get; set; }
 }

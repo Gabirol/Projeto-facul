@@ -10,6 +10,6 @@ namespace TicketFlowWeb.Models
         {
         }
         public DbSet<UsuarioModel> Usuarios { get; set; }
-        public DbSet<ChamadoModel> ChamadosModel { get; set; }
+        public DbSet<ChamadoModel> Chamados { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace TicketFlowWeb.Controllers
                     UsuarioId = int.Parse(usuarioId)
                 };
 
-                _context.ChamadosModel.Add(chamado);
+                _context.Chamados.Add(chamado);
                 await _context.SaveChangesAsync();
 
                 return Ok(new { success = true, message = "Chamado criado com sucesso!", id = chamado.Id });
@@ -71,7 +71,6 @@ namespace TicketFlowWeb.Controllers
             return View(chamados);
         }
 
-        // GET: /Chamados/Detalhes/{id}
         public async Task<IActionResult> Detalhes(int id)
         {
             var chamado = await _context.Chamados
@@ -86,7 +85,6 @@ namespace TicketFlowWeb.Controllers
         }
     }
 
-    // ViewModel para criação de chamados
     public class CriarChamadoViewModel
     {
         public string Titulo { get; set; } = string.Empty;
