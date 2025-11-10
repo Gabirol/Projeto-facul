@@ -64,13 +64,186 @@ function criarChamado() {
         });
 }
 
+// Funções para mostrar as seções
+function showSection(sectionId) {
+    // Esconde todas as seções
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Mostra a seção selecionada
+    document.getElementById(sectionId).style.display = 'block';
+
+    // Carrega dados específicos quando a seção é aberta
+    if (sectionId === 'ver-chamados') {
+        carregarTodosChamados();
+    } else if (sectionId === 'meus-chamados') {
+        carregarMeusChamados();
+    }
+}
+
+// Carregar TODOS os chamados
+async function carregarTodosChamados() {
+    const loading = document.getElementById('loadingTodos');
+    const tabela = document.getElementById('tabela-todos-chamados');
+    const corpo = document.getElementById('corpo-todos-chamados');
+    const semDados = document.getElementById('sem-chamados-todos');
+
+    loading.style.display = 'block';
+    tabela.style.display = 'none';
+    semDados.style.display = 'none';
+
+    try {
+        const response = await fetch('/Chamados/Index');
+        if (response.ok) {
+            window.location.href = '/Chamados/Index'; // Redireciona para a página dedicada
+        } else {
+            throw new Error('Erro ao carregar chamados');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        loading.style.display = 'none';
+        semDados.style.display = 'block';
+        semDados.innerHTML = '<p>Erro ao carregar chamados.</p>';
+    }
+}
+
+// Carregar apenas MEUS chamados
+async function carregarMeusChamados() {
+    const loading = document.getElementById('loadingMeus');
+    const tabela = document.getElementById('tabela-meus-chamados');
+    const corpo = document.getElementById('corpo-meus-chamados');
+    const semDados = document.getElementById('sem-chamados-meus');
+
+    loading.style.display = 'block';
+    tabela.style.display = 'none';
+    semDados.style.display = 'none';
+
+    try {
+        const response = await fetch('/Chamados/MeusChamados');
+        if (response.ok) {
+            window.location.href = '/Chamados/MeusChamados'; // Redireciona para a página dedicada
+        } else {
+            throw new Error('Erro ao carregar seus chamados');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        loading.style.display = 'none';
+        semDados.style.display = 'block';
+        semDados.innerHTML = '<p>Erro ao carregar seus chamados.</p>';
+    }
+}
+
+// Funções de ação
 function editarChamado(id) {
-    alert(`Editando chamado #${id}`);
+    if (confirm('Deseja editar este chamado?')) {
+        window.location.href = '/Chamados/Editar/' + id;
+    }
 }
 
 function excluirChamado(id) {
     if (confirm('Tem certeza que deseja excluir este chamado?')) {
-        alert(`Chamado #${id} excluído!`);
+        fetch('/Chamados/Excluir/' + id, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Chamado excluído com sucesso!');
+                    // Recarrega a listagem atual
+                    if (document.getElementById('ver-chamados').style.display !== 'none') {
+                        carregarTodosChamados();
+                    } else {
+                        carregarMeusChamados();
+                    }
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao excluir chamado');
+            });
+    }
+}// Funções para mostrar as seções
+function showSection(sectionId) {
+    // Esconde todas as seções
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Mostra a seção selecionada
+    document.getElementById(sectionId).style.display = 'block';
+
+    // Carrega dados específicos quando a seção é aberta
+    if (sectionId === 'ver-chamados') {
+        carregarTodosChamados();
+    } else if (sectionId === 'meus-chamados') {
+        carregarMeusChamados();
+    }
+}
+
+// Carregar TODOS os chamados
+async function carregarTodosChamados() {
+    const loading = document.getElementById('loadingTodos');
+    const tabela = document.getElementById('tabela-todos-chamados');
+    const corpo = document.getElementById('corpo-todos-chamados');
+    const semDados = document.getElementById('sem-chamados-todos');
+
+    loading.style.display = 'block';
+    tabela.style.display = 'none';
+    semDados.style.display = 'none';
+
+    try {
+        const response = await fetch('/Chamados/ListarChamados');
+        if (response.ok) {
+            window.location.href = '/Chamados/ListarChamados';
+        } else {
+            throw new Error('Erro ao carregar chamados');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        loading.style.display = 'none';
+        semDados.style.display = 'block';
+        semDados.innerHTML = '<p>Erro ao carregar chamados.</p>';
+    }
+}
+
+function editarChamado(id) {
+    if (confirm('Deseja editar este chamado?')) {
+        window.location.href = '/Chamados/Editar/' + id;
+    }
+}
+
+function excluirChamado(id) {
+    if (confirm('Tem certeza que deseja excluir este chamado?\nEsta ação não pode ser desfeita.')) {
+        // Mostrar loading
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '🗑️ Excluindo...';
+        btn.disabled = true;
+
+        fetch('/Chamados/Excluir/' + id, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Chamado excluído com sucesso!');
+                    location.reload(); // Recarrega a página
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao excluir chamado');
+            })
+            .finally(() => {
+                // Restaura o botão
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
     }
 }
 

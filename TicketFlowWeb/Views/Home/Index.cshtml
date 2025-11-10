@@ -11,24 +11,25 @@
 </div>
 
 <!-- Dashboard Section -->
+<!-- Dashboard Section -->
 <div id="dashboard" class="content-section">
     <h2>Dashboard</h2>
     <div class="dashboard-cards">
         <div class="card">
+            <h3>Total de Chamados</h3>
+            <div class="number">@ViewBag.TotalChamados</div>
+        </div>
+        <div class="card">
+            <h3>Meus Chamados</h3>
+            <div class="number">@ViewBag.MeusChamados</div>
+        </div>
+        <div class="card">
             <h3>Chamados Abertos</h3>
-            <div class="number">24</div>
+            <div class="number">@ViewBag.ChamadosAbertos</div>
         </div>
         <div class="card">
             <h3>Em Andamento</h3>
-            <div class="number">12</div>
-        </div>
-        <div class="card">
-            <h3>Resolvidos Hoje</h3>
-            <div class="number">8</div>
-        </div>
-        <div class="card">
-            <h3>Tempo Médio</h3>
-            <div class="number">2h 30m</div>
+            <div class="number">@ViewBag.ChamadosAndamento</div>
         </div>
     </div>
 </div>
@@ -71,10 +72,13 @@
     </form>
 </div>
 
-<div id="ver-chamados" class="content-section" style="display:none;">
+<<div id="ver-chamados" class="content-section" style="display:none;">
     <h2>Todos os Chamados</h2>
     <div class="table-container">
-        <table>
+        <div class="text-center" id="loadingTodos" style="display: none;">
+            <p>Carregando chamados...</p>
+        </div>
+        <table id="tabela-todos-chamados" style="display: none;">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -86,30 +90,12 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>#001</td>
-                    <td>Problema com impressora</td>
-                    <td>Hardware</td>
-                    <td><span style="color: var(--warning-color);">Em Andamento</span></td>
-                    <td><span style="color: var(--danger-color);">Alta</span></td>
-                    <td>10/11/2024</td>
-                    <td>
-                        <button class="btn btn-warning" onclick="editarChamado(1)">Editar</button>
-                        <button class="btn btn-danger" onclick="excluirChamado(1)">Excluir</button>
-                    </td>
-                </tr>
+            <tbody id="corpo-todos-chamados">
+                <!-- Os dados serão carregados via JavaScript -->
             </tbody>
         </table>
+        <div id="sem-chamados-todos" style="display: none;">
+            <p>Nenhum chamado encontrado.</p>
+        </div>
     </div>
-</div>
-
-<div id="meus-chamados" class="content-section" style="display:none;">
-    <h2>Meus Chamados</h2>
-    <p>Aqui aparecerão apenas os chamados do usuário logado.</p>
-</div>
-
-<div id="faq" class="content-section" style="display:none;">
-    <h2>FAQ e Soluções Sugeridas pela IA</h2>
-    <p>Conteúdo do FAQ será carregado aqui...</p>
 </div>

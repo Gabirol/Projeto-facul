@@ -483,7 +483,6 @@ C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\sc
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\scopedcss\projectbundle\TicketFlowWeb.bundle.scp.css
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\qt5dk5nyqj-ullzvgt3d3.gz
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\blba3jfc5t-61n19gt1b8.gz
-C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\9zh6uyoj68-go6n4whmdv.gz
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\0zei8pskfj-t1cqhe9u97.gz
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\nqs4p2yusn-c2jlpeoesf.gz
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\r7id2rw3uu-sejl45xvog.gz
@@ -556,3 +555,4 @@ C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\re
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.pdb
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\TicketFlowWeb.genruntimeconfig.cache
 C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\ref\TicketFlowWeb.dll
+C:\Users\Pichau\Documents\GitHub\Projeto-facul\TicketFlowWeb\obj\Debug\net9.0\compressed\9zh6uyoj68-g035u5cq9b.gz

@@ -80,8 +80,8 @@ namespace TicketFlowWeb.Controllers
 
             // Login bem-sucedido - vamos implementar sessão
             HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
-            HttpContext.Session.SetString("UsuarioNome", usuario.Nome);
-            HttpContext.Session.SetString("UsuarioEmail", usuario.Email);
+            HttpContext.Session.SetString("UsuarioNome", usuario.Nome ?? "usuario");
+            HttpContext.Session.SetString("UsuarioEmail", usuario.Email ?? "");
             HttpContext.Session.SetString("UsuarioRole", usuario.Role ?? "usuario");
 
             TempData["Mensagem"] = $"Bem-vindo, {usuario.Nome}!";
