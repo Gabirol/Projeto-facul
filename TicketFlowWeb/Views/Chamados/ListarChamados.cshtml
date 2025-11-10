@@ -164,30 +164,37 @@
 
             function excluirChamado(id) {
                 if (confirm('Tem certeza que deseja excluir este chamado?\nEsta ação não pode ser desfeita.')) {
-                    // Mostrar loading
+                    console.log('Tentando excluir chamado ID:', id);
+
                     const btn = event.target;
                     const originalText = btn.innerHTML;
                     btn.innerHTML = '🗑️ Excluindo...';
                     btn.disabled = true;
 
                     fetch('/Chamados/Excluir/' + id, {
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
                     })
-                        .then(response => response.json())
+                        .then(response => {
+                            console.log('Status da resposta:', response.status);
+                            return response.json();
+                        })
                         .then(data => {
+                            console.log('Resposta do servidor:', data);
                             if (data.success) {
                                 alert('Chamado excluído com sucesso!');
-                                location.reload(); // Recarrega a página
+                                location.reload();
                             } else {
                                 alert('Erro: ' + data.message);
                             }
                         })
                         .catch(error => {
-                            console.error('Erro:', error);
-                            alert('Erro ao excluir chamado');
+                            console.error('Erro completo:', error);
+                            alert('Erro ao excluir chamado. Verifique o console para detalhes.');
                         })
                         .finally(() => {
-                            // Restaura o botão
                             btn.innerHTML = originalText;
                             btn.disabled = false;
                         });
