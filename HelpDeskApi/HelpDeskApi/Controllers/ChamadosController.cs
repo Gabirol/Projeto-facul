@@ -18,7 +18,6 @@ namespace HelpDeskApi.Controllers
             _context = context;
         }
 
-        // Autenticação rolers
         [Authorize]
         [HttpGet("teste")]
         public IActionResult ListarChamados()
@@ -33,22 +32,17 @@ namespace HelpDeskApi.Controllers
             return Ok($"Chamado {id} atualizado pelo técnico!");
         }
 
-        // GET: api/Chamados - Mostrar chamados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Chamado>>> GetChamados()
         {
-            // Recupera o ID do usuário autenticado (armazenado no token JWT)
-            var userIdClaim = User.FindFirst("id")?.Value; // ou "id" dependendo do token que você gera
+            var userIdClaim = User.FindFirst("id")?.Value;
             if (userIdClaim == null)
                 return Unauthorized("Usuário não identificado no token.");
 
             int userId = int.Parse(userIdClaim);
 
-            // Cria a query base incluindo as relações
-            IQueryable<Chamado> query = _context.Chamados
-                .Include(c => c.Usuario)
-                .Include(c => c.Tecnico)
-                .Include(c => c.Bot);
+            // 🔥 CORREÇÃO: Busca simples sem includes
+            IQueryable<Chamado> query = _context.Chamados;
 
             // Se for técnico → vê todos os chamados
             if (User.IsInRole("Tecnico"))
@@ -58,7 +52,7 @@ namespace HelpDeskApi.Controllers
 
             // Caso contrário → vê apenas os chamados que ele criou
             var meusChamados = await query
-                .Where(c => c.UsuarioId == userId)
+                .Where(c => c.usuario_id == userId)
                 .ToListAsync();
 
             return meusChamados;
@@ -69,10 +63,7 @@ namespace HelpDeskApi.Controllers
         public async Task<ActionResult<Chamado>> GetChamado(int id)
         {
             var chamado = await _context.Chamados
-                .Include(c => c.Usuario)
-                .Include(c => c.Tecnico)
-                .Include(c => c.Bot)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.id == id);
 
             if (chamado == null)
                 return NotFound();
@@ -89,50 +80,75 @@ namespace HelpDeskApi.Controllers
             if (chamado == null)
                 return NotFound("Chamado não encontrado.");
 
-            if (chamado.Status == "Resolvido")
+            // 🔥 CORREÇÃO: Usar propriedades minúsculas
+            if (chamado.status == "Resolvido")
                 return BadRequest("Este chamado já está fechado.");
 
-            chamado.Status = "Resolvido";
-            chamado.DataFechamento = DateTime.Now;
+            chamado.status = "Resolvido";
+            chamado.updated_at = DateTime.Now; // 🔥 Usar updated_at em vez de DataFechamento
 
             await _context.SaveChangesAsync();
 
             return Ok(new
             {
                 mensagem = "Chamado fechado com sucesso.",
-                chamado.Id,
-                chamado.Titulo,
-                chamado.Status,
-                chamado.DataFechamento
+                chamado.id,           // 🔥 minúsculo
+                chamado.titulo,       // 🔥 minúsculo  
+                chamado.status,       // 🔥 minúsculo
+                dataFechamento = chamado.updated_at
             });
         }
 
-        // POST: api/Chamados - Criar chamado
         [HttpPost]
         public async Task<ActionResult<Chamado>> PostChamado(Chamado chamado)
         {
-            // Configura valores padrão
-            chamado.DataAbertura = DateTime.Now;
-            if (string.IsNullOrEmpty(chamado.Status))
-                chamado.Status = "Em andamento";
-
-            // Verifica se o usuário existe
-            var usuario = await _context.Usuarios.FindAsync(chamado.UsuarioId);
-            if (usuario == null)
-                return BadRequest("Usuário informado não existe.");
-
-            // Verifica se o técnico (caso enviado) existe
-            if (chamado.TecnicoId.HasValue)
+            try
             {
-                var tecnico = await _context.Tecnicos.FindAsync(chamado.TecnicoId.Value);
-                if (tecnico == null)
-                    return BadRequest("Técnico informado não existe.");
+                Console.WriteLine("=== INÍCIO POST CHAMADO ===");
+
+                if (chamado == null)
+                    return BadRequest("Dados do chamado são nulos.");
+
+                // 🔥 CORREÇÃO: Validações com propriedades minúsculas
+                if (string.IsNullOrWhiteSpace(chamado.titulo))
+                    return BadRequest("Título é obrigatório.");
+
+                if (string.IsNullOrWhiteSpace(chamado.descricao))
+                    return BadRequest("Descrição é obrigatória.");
+
+                if (chamado.usuario_id == null || chamado.usuario_id <= 0)
+                    return BadRequest("ID do usuário é inválido.");
+
+                // Configurar valores padrão
+                chamado.created_at = DateTime.Now;
+                chamado.updated_at = DateTime.Now;
+
+                if (string.IsNullOrEmpty(chamado.status))
+                    chamado.status = "Aberto";
+
+                if (string.IsNullOrEmpty(chamado.prioridade))
+                    chamado.prioridade = "Normal";
+
+                // Verificar se o usuário existe
+                var usuario = await _context.Usuarios.FindAsync(chamado.usuario_id);
+                if (usuario == null)
+                    return BadRequest("Usuário informado não existe.");
+
+                Console.WriteLine($"Salvando chamado: {chamado.titulo}");
+
+                // Salvar no banco
+                _context.Chamados.Add(chamado);
+                await _context.SaveChangesAsync();
+
+                Console.WriteLine($"Chamado salvo com ID: {chamado.id}");
+
+                return CreatedAtAction(nameof(GetChamado), new { id = chamado.id }, chamado);
             }
-
-            _context.Chamados.Add(chamado);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetChamado), new { id = chamado.Id }, chamado);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERRO: {ex.Message}");
+                return StatusCode(500, $"Erro interno: {ex.Message}");
+            }
         }
 
         // DELETE: api/Chamados/{id}
@@ -151,15 +167,15 @@ namespace HelpDeskApi.Controllers
             return Ok(new
             {
                 mensagem = "Chamado excluído com sucesso.",
-                chamado.Id,
-                chamado.Titulo,
-                chamado.Status
+                chamado.id,       // 🔥 minúsculo
+                chamado.titulo,   // 🔥 minúsculo
+                chamado.status    // 🔥 minúsculo
             });
         }
+
         private bool ChamadoExists(int id)
         {
-            return _context.Chamados.Any(e => e.Id == id);
+            return _context.Chamados.Any(e => e.id == id); // 🔥 minúsculo
         }
-
     }
 }

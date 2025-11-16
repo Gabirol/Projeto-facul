@@ -2,23 +2,14 @@
 {
     public class Chamado
     {
-        public int Id { get; set; }
-        public string Titulo { get; set; } = string.Empty;
-        public string Categoria { get; set; } = string.Empty;
-        public string Descricao { get; set; } = string.Empty;
-        public string Status {  get; set; } = "Em andamento";
-        public string Prioridade { get; set; } = "Normal";
-
-        public DateTime DataAbertura { get; set; }
-        public DateTime? DataFechamento { get; set; }
-
-        public int UsuarioId { get; set; }
-        public Usuario? Usuario { get; set; }
-
-        public int? TecnicoId { get; set; }
-        public Tecnico? Tecnico { get; set; }
-
-        public int? BotId {  get; set; }
-        public Bot? Bot { get; set; }
+        public int id { get; set; }
+        public int? usuario_id { get; set; }
+        public string? titulo { get; set; }
+        public string? descricao { get; set; }
+        public string? categoria { get; set; }
+        public string? prioridade { get; set; }
+        public string? status { get; set; }
+        public DateTime? created_at { get; set; }
+        public DateTime? updated_at { get; set; }
     }
 }

@@ -14,29 +14,22 @@ namespace HelpDeskApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Chamado>(entity =>
+            {
+                entity.ToTable("chamados");
+                entity.HasKey(e => e.id);
 
-            // Usuário - Chamados
-            modelBuilder.Entity<Chamado>()
-                .HasOne(c => c.Usuario)
-                .WithMany(u => u.Chamados)
-                .HasForeignKey(c => c.UsuarioId)
-                .IsRequired();
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.usuario_id).HasColumnName("usuario_id");
+                entity.Property(e => e.titulo).HasColumnName("titulo");
+                entity.Property(e => e.descricao).HasColumnName("descricao");
+                entity.Property(e => e.categoria).HasColumnName("categoria");
+                entity.Property(e => e.prioridade).HasColumnName("prioridade");
+                entity.Property(e => e.status).HasColumnName("status");
+                entity.Property(e => e.created_at).HasColumnName("created_at");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at");
+            });
 
-            // Técnico - Chamados
-            modelBuilder.Entity<Chamado>()
-                .HasOne(c => c.Tecnico)
-                .WithMany(t => t.Chamados)
-                .HasForeignKey(c => c.TecnicoId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false); ;
-
-            // Bot - Chamados
-            modelBuilder.Entity<Chamado>()
-                .HasOne(c => c.Bot)
-                .WithMany(b => b.Chamados)
-                .HasForeignKey(c => c.BotId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired(false); ;
         }
     }
 }

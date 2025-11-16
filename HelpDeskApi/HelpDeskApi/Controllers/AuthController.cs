@@ -56,6 +56,13 @@ namespace HelpDeskApi.Controllers
                 return Unauthorized("E-mail ou senha inválidos.");
 
             var token = GerarToken(usuario);
+
+            // 🔥 DEBUG: Verificar se o token está sendo gerado
+            Console.WriteLine($"=== TOKEN GERADO ===");
+            Console.WriteLine($"Token: {token}");
+            Console.WriteLine($"Usuário: {usuario.Name}");
+            Console.WriteLine($"Role: {usuario.Role}");
+
             return Ok(new { token, usuario.Name, usuario.Role });
         }
 
@@ -65,12 +72,13 @@ namespace HelpDeskApi.Controllers
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings["Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            // 🔥 CORREÇÃO: Garantir que não sejam nulos
             var claims = new[]
             {
-                new Claim("id", usuario.Id.ToString()),
-                new Claim(ClaimTypes.Name, usuario.Name),
-                new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.Role)
+                new Claim("id", usuario.Id.ToString() ?? "0"),
+                new Claim(ClaimTypes.Name, usuario.Name ?? ""),
+                new Claim(ClaimTypes.Email, usuario.Email ?? ""),
+                new Claim(ClaimTypes.Role, usuario.Role ?? "usuario")
             };
 
             var token = new JwtSecurityToken(
