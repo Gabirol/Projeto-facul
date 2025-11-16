@@ -23,15 +23,27 @@ namespace HelpDeskApi.Controllers
         }
 
         [HttpPost("registrar")]
-        public IActionResult Registrar([FromBody] Usuario novoUsuario)
+        public IActionResult Registrar([FromBody] UsuarioRegistroDTO usuarioDTO)
         {
-            if (_context.Usuarios.Any(u => u.Email == novoUsuario.Email))
+            if (_context.Usuarios.Any(u => u.Email == usuarioDTO.Email))
                 return BadRequest("E-mail já registrado.");
+
+            var novoUsuario = new Usuario
+            {
+                Name = usuarioDTO.Name,
+                Email = usuarioDTO.Email,
+                senha = usuarioDTO.senha,
+                Role = usuarioDTO.Role
+            };
 
             _context.Usuarios.Add(novoUsuario);
             _context.SaveChanges();
 
-            return Ok("Usuário registrado com sucesso!");
+            return Ok(new
+            {
+                message = "Usuário registrado com sucesso!",
+                id = novoUsuario.Id // Retorna o ID gerado
+            });
         }
 
         [HttpPost("login")]
